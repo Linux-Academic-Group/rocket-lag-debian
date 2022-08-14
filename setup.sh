@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 IMAGES_DIR=images
 DISK_IMAGE=$IMAGES_DIR/storage.img
 DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64.iso
@@ -10,9 +8,10 @@ DEBIAN_DIR=$IMAGES_DIR/debian
 LAG_ISO=rocket-lag-debian.iso
 
 setup_debian() {
-    if [ ! -f $IMAGES_DIR/$DEBIAN_DIR ]; then
+    mkdir -p $DEBIAN_DIR
+    if [ ! -f $DEBIAN_DIR ]; then
         # Download debian image if not present
-        if [ ! -f $IMAGES_DIR/$DEBIAN_ISO ]; then
+        if [ ! -f $DEBIAN_ISO ]; then
             echo "No debian iso, downloading..."
             wget -q -O $DEBIAN_ISO $DEBIAN_URL
         fi
@@ -20,10 +19,10 @@ setup_debian() {
     fi
 }
 
-add_preseed() {
+add_files() {
     chmod +w -R $DEBIAN_DIR/install.amd
     gunzip $DEBIAN_DIR/install.amd/initrd.gz
-    echo preseed.cfg | cpio -H newc -o -A -F $DEBIAN_DIR/install.amd/initrd
+    find conf preseed.cfg | cpio -H newc -o -A -F $DEBIAN_DIR/install.amd/initrd
     gzip $DEBIAN_DIR/install.amd/initrd
     chmod -w -R $DEBIAN_DIR/install.amd/
 }
