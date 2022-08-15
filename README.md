@@ -31,3 +31,9 @@ After installation in qemu the system can be booted using the following command:
 ```
 qemu-system-x86_64 -m 4G -smp 4 -hda images/storage.img -enable-kvm
 ```
+
+All files that are to be copied to an installed filesystem should be placed in `conf` directory. The syntax of copying files is following:
+```
+d-i preseed/late_command string cp -r conf/etc/sources.list /target/etc/apt/sources.list
+```
+This is the sample line that copies apt sources file from the iso to the installed system. If you wish to add any other files to the installed system, the syntax is the same.
