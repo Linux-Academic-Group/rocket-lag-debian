@@ -39,8 +39,8 @@ build_image() {
 }
 
 run_iso() {
-    qemu-system-x86_64 -m 4G -smp 4 \
-    -hda $DISK_IMAGE \
+    qemu-system-x86_64 -m $1 -smp $2 \
+    -hda $3 \
     -cdrom $IMAGES_DIR/$LAG_ISO \
     -boot d -enable-kvm
 }
