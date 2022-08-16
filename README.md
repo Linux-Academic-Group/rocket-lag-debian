@@ -37,3 +37,5 @@ All files that are to be copied to an installed filesystem should be placed in `
 d-i preseed/late_command string cp -r conf/etc/sources.list /target/etc/apt/sources.list
 ```
 This is the sample line that copies apt sources file from the iso to the installed system. If you wish to add any other files to the installed system, the syntax is the same.
+
+After the installation, the default username is `debian` with `12345` as a password (there is `root` with the same password too). This of course can be changed both after the installation or before, in preseed file.
