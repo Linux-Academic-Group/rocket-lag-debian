@@ -16,7 +16,7 @@ To add preseed and configs use
 
 To build the iso use
 ```
-./setup.sh build_iso
+./setup.sh build_image 
 ```
 
 # Running the image
