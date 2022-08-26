@@ -33,7 +33,11 @@ build_image() {
     genisoimage -r -J -b isolinux/isolinux.bin \
         -c isolinux/boot.cat \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
-        -o ../$LAG_ISO .
+        -eltorito-alt-boot \
+		-e boot/grub/efi.img \
+		-no-emul-boot \
+		-o ../$LAG_ISO .
+	isohybrid --uefi ../$LAG_ISO
     cd -
     chmod -w $DEBIAN_DIR/isolinux/isolinux.bin
 }
