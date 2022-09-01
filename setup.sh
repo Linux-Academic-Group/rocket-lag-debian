@@ -30,7 +30,7 @@ add_debs() {
         --no-enhances --no-pre-depends ${PACKAGES} | grep "^\w")
     for i in ${ALL_PACKAGES}; do
         # get right directories to download the iso into
-        pkg_dir=$POOL_DIR/$(apt-get download --print-uris curl | awk -F "/" '{printf "%s/%s\n", $(NF-2), $(NF-1)}')
+        pkg_dir=$POOL_DIR/$(apt-get download --print-uris $i | awk -F "/" '{printf "%s/%s\n", $(NF-2), $(NF-1)}')
         mkdir -p $pkg_dir
         (cd $pkg_dir && apt-get download $i)
     done
