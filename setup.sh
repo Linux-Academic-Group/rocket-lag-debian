@@ -3,7 +3,7 @@
 IMAGES_DIR=images
 DISK_IMAGE=$IMAGES_DIR/storage.img
 DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64.iso
-DEBIAN_URL=https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/debian-11.4.0-amd64-DVD-1.iso
+DEBIAN_URL=https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-11.4.0-amd64-netinst.iso
 DEBIAN_DIR=$IMAGES_DIR/debian
 LAG_ISO=rocket-lag-debian.iso
 POOL_DIR=${DEBIAN_DIR}/pool/main
@@ -20,6 +20,10 @@ setup_debian() {
     fi
 }
 
+# +++ DEPRECIATED +++
+# The netinstall will automatically
+# download all of the needed packages
+# and theirs dependencies.
 add_debs() {
     # This requires debian-based distro, use docker if needed
     # TODO: add dockerfile for this step
