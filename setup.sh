@@ -24,7 +24,7 @@ add_debs() {
     # This requires debian-based distro, use docker if needed
     # TODO: add dockerfile for this step
     apt update
-    PACKAGES="mosquitto" # add any other packages here, separate with space
+    PACKAGES="mosquitto tint2" # add any other packages here, separate with space
     ALL_PACKAGES=$(apt-cache depends --recurse --no-recommends \
         --no-suggests --no-conflicts --no-breaks --no-replaces \
         --no-enhances --no-pre-depends ${PACKAGES} | grep "^\w")
