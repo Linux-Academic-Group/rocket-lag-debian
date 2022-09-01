@@ -56,7 +56,7 @@ build_image() {
         -c isolinux/boot.cat \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
         -eltorito-alt-boot \
-		-e boot/grub/efi.img \
+		--eltorito-boot boot/grub/efi.img \
 		-no-emul-boot \
 		-o ../$LAG_ISO .
 	isohybrid --uefi ../$LAG_ISO
