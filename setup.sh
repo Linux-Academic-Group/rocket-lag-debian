@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
+
 IMAGES_DIR=images
 DISK_IMAGE=$IMAGES_DIR/storage.img
-DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64.iso
+DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64-netinst.iso
 DEBIAN_URL=https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-11.4.0-amd64-netinst.iso
 DEBIAN_DIR=$IMAGES_DIR/debian
 LAG_ISO=rocket-lag-debian.iso
@@ -63,14 +65,17 @@ build_image() {
 		--eltorito-boot boot/grub/efi.img \
 		-no-emul-boot \
 		-o ../$LAG_ISO .
-	isohybrid --uefi ../$LAG_ISO
+    isohybrid ../$LAG_ISO
     cd -
     chmod -w $DEBIAN_DIR/isolinux/isolinux.bin
 }
 
 run_iso() {
+    # you need to install ovmf, copy OVMF.fd file to images dir and add write permissions
+    # TODO: installer prompts to force UEFI, the goal is to preseed yes for this
     qemu-system-x86_64 -m $1 -smp $2 \
     -hda $3 \
+    -bios $IMAGES_DIR/OVMF.fd \
     -cdrom $IMAGES_DIR/$LAG_ISO \
     -boot d -enable-kvm
 }
