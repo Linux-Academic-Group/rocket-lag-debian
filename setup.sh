@@ -1,9 +1,11 @@
 #!/bin/bash
 
+set -e
+
 IMAGES_DIR=images
 DISK_IMAGE=$IMAGES_DIR/storage.img
-DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64.iso
-DEBIAN_URL=https://cdimage.debian.org/debian-cd/current/amd64/iso-dvd/debian-11.4.0-amd64-DVD-1.iso
+DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64-netinst.iso
+DEBIAN_URL=https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-11.4.0-amd64-netinst.iso
 DEBIAN_DIR=$IMAGES_DIR/debian
 LAG_ISO=rocket-lag-debian.iso
 POOL_DIR=${DEBIAN_DIR}/pool/main
@@ -20,17 +22,21 @@ setup_debian() {
     fi
 }
 
+# +++ DEPRECIATED +++
+# The netinstall will automatically
+# download all of the needed packages
+# and theirs dependencies.
 add_debs() {
     # This requires debian-based distro, use docker if needed
     # TODO: add dockerfile for this step
     apt update
-    PACKAGES="mosquitto" # add any other packages here, separate with space
+    PACKAGES="mosquitto tint2" # add any other packages here, separate with space
     ALL_PACKAGES=$(apt-cache depends --recurse --no-recommends \
         --no-suggests --no-conflicts --no-breaks --no-replaces \
         --no-enhances --no-pre-depends ${PACKAGES} | grep "^\w")
     for i in ${ALL_PACKAGES}; do
         # get right directories to download the iso into
-        pkg_dir=$POOL_DIR/$(apt-get download --print-uris curl | awk -F "/" '{printf "%s/%s\n", $(NF-2), $(NF-1)}')
+        pkg_dir=$POOL_DIR/$(apt-get download --print-uris $i | awk -F "/" '{printf "%s/%s\n", $(NF-2), $(NF-1)}')
         mkdir -p $pkg_dir
         (cd $pkg_dir && apt-get download $i)
     done
@@ -56,17 +62,20 @@ build_image() {
         -c isolinux/boot.cat \
         -no-emul-boot -boot-load-size 4 -boot-info-table \
         -eltorito-alt-boot \
-		-e boot/grub/efi.img \
+		--eltorito-boot boot/grub/efi.img \
 		-no-emul-boot \
 		-o ../$LAG_ISO .
-	isohybrid --uefi ../$LAG_ISO
+    isohybrid ../$LAG_ISO
     cd -
     chmod -w $DEBIAN_DIR/isolinux/isolinux.bin
 }
 
 run_iso() {
+    # you need to install ovmf, copy OVMF.fd file to images dir and add write permissions
+    # TODO: installer prompts to force UEFI, the goal is to preseed yes for this
     qemu-system-x86_64 -m $1 -smp $2 \
     -hda $3 \
+    -bios $IMAGES_DIR/OVMF.fd \
     -cdrom $IMAGES_DIR/$LAG_ISO \
     -boot d -enable-kvm
 }
