@@ -4,8 +4,8 @@ set -e
 
 IMAGES_DIR=images
 DISK_IMAGE=$IMAGES_DIR/storage.img
-DEBIAN_ISO=$IMAGES_DIR/debian-11.4.0-amd64-netinst.iso
-DEBIAN_URL=https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-11.4.0-amd64-netinst.iso
+DEBIAN_ISO=$IMAGES_DIR/firmware-11.5.0-amd64-netinst.iso
+DEBIAN_URL=https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/amd64/iso-cd/firmware-11.5.0-amd64-netinst.iso
 DEBIAN_DIR=$IMAGES_DIR/debian
 LAG_ISO=rocket-lag-debian.iso
 POOL_DIR=${DEBIAN_DIR}/pool/main
