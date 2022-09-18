@@ -11,8 +11,8 @@ LAG_ISO=rocket-lag-debian.iso
 POOL_DIR=${DEBIAN_DIR}/pool/main
 
 setup_debian() {
-    mkdir -p $DEBIAN_DIR
-    if [ ! -f $DEBIAN_DIR ]; then
+    if [ ! -d $DEBIAN_DIR ]; then
+        mkdir -p $DEBIAN_DIR
         # Download debian image if not present
         if [ ! -f $DEBIAN_ISO ]; then
             echo "No debian iso, downloading..."
