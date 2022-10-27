@@ -1,0 +1,14 @@
+--- rc.old.xml	2022-10-23 14:08:21.960000000 +0200
++++ rc.xml	2022-10-23 14:04:13.124000000 +0200
+@@ -307,6 +307,11 @@
+   <keybind key="Print">
+     <action name="Execute"><command>scrot</command></action>
+   </keybind>
++  <keybind key="C-A-t">
++    <action name="Execute">
++      <command>xfce4-terminal</command>
++    </action>
++  </keybind>
+ </keyboard>
+ 
+ <mouse>
